@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content=""/>
+    <meta name="keywords" content="bootstrap, bootstrap4"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap"
+          rel="stylesheet">
+    <title>Tour Free Bootstrap Template for Travel Agency by Untree.co</title>
+</head>
+<div th:fragment="header">
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close">
+                <span class="icofont-close js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+    <nav class="site-nav">
+        <div class="container">
+            <div class="site-navigation">
+                <a href="/" class="logo m-0"><span style="font-size: 50px">여</span><span style="font-size: 20px">행</span><span style="font-size: 50px">정</span><span style="font-size: 20px">보</span></a>
+
+                <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right" style="margin-right:5%">
+                    <li sec:authorize="isAuthenticated()"><a href="/back/backlist">배낭</a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/members/login">로그인</a></li>
+                    <li class="has-children"  sec:authorize="isAuthenticated()">
+                        <a href="#">회원정보수정</a>
+                        <ul class="dropdown">
+                            <li><a href="/members/memberMod">회원정보수정</a></li>
+                            <li><a href="/members/memberPasswordMod">비밀번호 변경</a></li>
+                        </ul>
+                    </li>
+                    <li  sec:authorize="isAuthenticated()">
+                        <a href="/members/logout">로그아웃</a>
+                    </li>
+                </ul>
+
+                <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
+                    <li class="has-children">
+                        <a href="#">여행 정보</a>
+                        <ul class="dropdown">
+                            <li><a href="/travel/travellist">여행 정보</a></li>
+                            <li><a href="/festival/festivallist">축제 정보</a></li>
+                            <li><a href="/media/medialist">미디어 정보</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/board/lists">커뮤니티</a></li>
+                    <li class="has-children" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a href="#">정보 등록</a>
+                        <ul class="dropdown">
+                            <li><a href="/travel/travelInfoForm">여행 정보</a></li>
+                            <li><a href="/festival/festivalregister">축제 정보</a></li>
+                            <li><a href="/media/mediaRegister">미디어 정보</a></li>
+                        </ul>
+                    </li>
+                    <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')"><a href="/members/membermanager">회원관리</a></li>
+                </ul>
+                <a href="#"
+                   class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none light"
+                   data-toggle="collapse" data-target="#main-navbar">
+                    <span></span>
+                </a>
+
+            </div>
+        </div>
+    </nav>
+</div>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<div layout:fragment="content">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $("select[name='countryid']").on("change", function () {
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+                var countryid = document.getElementById("countryid").value;
+                var countStr = "";
+                $.ajax({
+                    url: "city/citylist",
+                    type: 'post',
+                    data: {
+                        "countryid": countryid
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    dataType: "JSON",
+                    success: function (data) {
+                        $(data).each(function () {
+                            countStr += "<option value='" + this.cityid + "'>" + this.ccity + "</option>";
+                        });
+                        $("select[name='cityid']").html(countStr);
+                    }
+                });
+            });
+            var slides = $('.slides'),
+                images = slides.find('img');
+
+            images.each(function(i) {
+                $(this).attr('data-id', i + 1);
+            })
+
+            var typed = new Typed('.typed-words', {
+                strings: ["San Francisco."," Paris."," New Zealand.", " Maui.", " London."],
+                typeSpeed: 80,
+                backSpeed: 80,
+                backDelay: 4000,
+                startDelay: 1000,
+                loop: true,
+                showCursor: true,
+                preStringTyped: (arrayPos, self) => {
+                    arrayPos++;
+                    console.log(arrayPos);
+                    $('.slides img').removeClass('active');
+                    $('.slides img[data-id="'+arrayPos+'"]').addClass('active');
+                }
+
+            });
+        });
+
+    </script>
+    <div class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="intro-wrap">
+                        <h1 class="mb-5"><span class="d-block">Let's Enjoy Your</span> Trip In <span class="typed-words"></span></h1>
+                        <div class="row">
+                            <div class="col-12">
+                                <form class="form" action="travel/travellist"
+                                      style="background-color:rgba(0, 0, 0, 0.2);  !important;  margin-right: 60px">
+                                    <div class="row"   style="display: flex; flex-flow: nowrap; margin-right: 50px">
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-4">
+                                            <select class="form-control custom-select" id="countryid" name="countryid">
+                                                <option value="0">국가</option>
+                                                <option th:each="countryList : ${countryList}"
+                                                        th:value="${countryList.countryid}">[[${countryList.ccountry}]]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-4">
+                                            <select name="cityid" id="cityid" class="form-control custom-select">
+                                                <option value="0">도시</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-3">
+                                            <button id="searchbtn" type="submit"
+                                                    style="background-color: rgb(0,0,0,0); border: 0;"><img
+                                                    src="/images/photo/search_btn.png"
+                                                    style="height: 30px; margin-top: 5%;"></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="slides"style="height: 590px; !important;">
+                        <img src="/images/photo/hero-slider-1.jpg" alt="Image" class="img-fluid active">
+                        <img src="/images/photo/hero-slider-2.jpg" alt="Image" class="img-fluid">
+                        <img src="/images/photo/hero-slider-3.jpg" alt="Image" class="img-fluid">
+                        <img src="/images/photo/hero-slider-4.jpg" alt="Image" class="img-fluid">
+                        <img src="/images/photo/hero-slider-5.jpg" alt="Image" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row text-center justify-content-center mb-5">
+                <div class="col-lg-7"><h3 class="section-title text-center"
+                                          style="font-family: 'Varela Round', Helvetica, Arial, sans-serif media-text; font-weight: bold">
+                    Popular Place!</h3></div>
+            </div>
+
+            <div class="owl-carousel owl-3-slider">
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/photo/hero-slider-1.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Pragser Wildsee</h3>
+                            <span class="location">Italy</span>
+                        </div>
+                        <img src="/images/photo/hero-slider-1.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/photo/hero-slider-2.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Oia</h3>
+                            <span class="location">Greece</span>
+                        </div>
+                        <img src="/images/photo/hero-slider-2.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/photo/hero-slider-3.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Perhentian Islands</h3>
+                            <span class="location">Malaysia</span>
+                        </div>
+                        <img src="/images/photo/hero-slider-3.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/photo/hero-slider-4.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Rialto Bridge</h3>
+                            <span class="location">Italy</span>
+                        </div>
+                        <img src="/images/photo/hero-slider-4.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/photo/hero-slider-5.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>San Francisco, United States</h3>
+                            <span class="location">United States</span>
+                        </div>
+                        <img src="/images/photo/hero-slider-5.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/photo/hero-slider-1.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Lake Thun</h3>
+                            <span class="location">Switzerland</span>
+                        </div>
+                        <img src="/images/photo/hero-slider-2.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

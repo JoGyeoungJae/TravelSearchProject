@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<div layout:fragment="content">
+    <style>
+        .travel_flex {
+            display: flex;
+            margin: 20px;
+            background: rgba(26, 55, 77, 0.05);
+            border-radius: 20px;
+            min-height: calc(50% - 15px);
+            top: 0;
+            margin-bottom: 50px !important;
+        }
+
+        .rows3 {
+            word-break: break-all;
+            overflow: hidden;
+            white-space: normal;
+            line-height: 1.2;
+            height: 3.6em;
+            text-align: left;
+            word-wrap: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+    </style>
+    <script>
+        function del(bkid) {
+            if (confirm("삭제하시겠습니까?")) {
+
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+                var bkid = bkid;
+                $.ajax({
+                    url: "/back/del",
+                    type: 'post',
+                    data: {
+                        "bkid": bkid
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    dataType: "JSON"
+                });
+            }
+            location.reload();
+        }
+    </script>
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mx-auto text-center">
+                    <div class="intro-wrap">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="untree_co-section">
+        <div class="container">
+            <div>
+                <div>
+                    <h2 style="font-family: 'Varela Round', Helvetica, Arial, sans-serif;  font-weight: bold;">여행</h2>
+                    <div th:each="backTList : ${backtravelList}" class="travel_flex">
+                        <div style="width: 20%; margin: auto 0;"><img th:src="${backTList.imgUrl}" alt="Image"
+                                                                      class="img-fluid"
+                                                                      style="width: 180px; height: 120px; border-radius: 20px; margin-left: 10%">
+                        </div>
+                        <div style="width: 75%; padding: 25px;">
+                            <P style="font-size: 23px;">
+                                <span th:text="${backTList.getTravelInfo().getTtitle()}"></span>
+                                <span>&nbsp;[[${backTList.getCountry().getCcountry()}]] / [[${backTList.getCity().getCcity()}]]</span>
+                            </P>
+                            <P class="rows3" th:text="${backTList.getTravelInfo().getTcontent()}"></P>
+
+                        </div>
+                        <div style="width: 5%; margin:auto 0 ;">
+                            <a href="#" style=" color: red" th:onclick="del([[${backTList.bkid}]])">삭제</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h2 style="font-family: 'Varela Round', Helvetica, Arial, sans-serif ; font-weight: bold;">축제</h2>
+                    <div th:each="backFlList : ${backfestivalList}" class="travel_flex">
+                        <div style="width: 20%; margin: auto 0;"><img th:src="${backFlList.imgUrl}" alt="Image"
+                                                                      class="img-fluid"
+                                                                      style="width: 180px; height: 120px; border-radius: 20px;margin-left: 10%;">
+                        </div>
+                        <div style="width: 75%; padding: 25px;">
+                            <P style="font-size: 23px;">
+                                <span th:text="${backFlList.getFestivalInfo().getFtitle()}"></span>
+                                <span>&nbsp;[[${backFlList.getCountry().getCcountry()}]] / [[${backFlList.getCity().getCcity()}]]</span>
+                            </P>
+                            <P class="rows3" th:text="${backFlList.getFestivalInfo().getFcontent()}"></P>
+
+                        </div>
+                        <div style="width: 5%; margin:auto 0 ;">
+                            <a href="#" style=" color: red" th:onclick="del([[${backFlList.bkid}]])">삭제</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</html>

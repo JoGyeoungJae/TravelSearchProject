@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/layout1}">
+
+<div layout:fragment="content">
+    <form id="form" method="post" th:object="${backdto}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <input type="hidden" id="tid" name="tid" th:value="${travelInfo.tid}">
+        <input type="hidden" sec:authorize="isAuthenticated()" id="mid" name="mid" th:value="${member.mid}">
+
+
+        <div class="site-mobile-menu site-navbar-target">
+            <div class="site-mobile-menu-header">
+                <div class="site-mobile-menu-close">
+                    <span class="icofont-close js-menu-toggle"></span>
+                </div>
+            </div>
+            <div class="site-mobile-menu-body"></div>
+        </div>
+
+        <div class="hero hero-inner">
+        </div>
+
+        <div class="untree_co-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="owl-single owl-carousel">
+                            <img th:src="${travelrepimYny.imgUrl}" alt="Free HTML Template by Untree.co"
+                                 class="img-fluid rounded-20">
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-5 pl-lg-5 ml-auto">
+                        <h2 class="section-title mb-4" style="font-family: 'Varela Round', Helvetica, Arial, sans-serif"
+                            th:text="${travelInfo.ttitle}"></h2>
+                        <p th:text="${travelInfo.tcontent}" style="word-break:break-all; font-size: 20px;">로마는 이탈리아 반도 중부 지역 테베레 강 연안에 있는 도시로, 이탈리아의 수도이자 최대도시이며 라치오의
+                            중심
+                            도시이다. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="untree_co-section">
+            <div class="container" style="grid-template-columns: 50px 50px 50px 50px">
+                <div class="row align-items-stretch">
+
+                    <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
+                        <div class="feature-1 d-md-flex">
+                            <div class="align-self-center">
+                                <p style="font-size: 20px; font-family: 'Varela Round', Helvetica, Arial, sans-serif;
+                                text-align: center; font-weight: bold;">시차</p>
+                                <p class="mb-0" th:text="${travelInfo.ttimediffer}" style="text-align: center; font-size: 20px;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
+                        <div class="feature-1 d-md-flex">
+                            <div class="align-self-center">
+                                <p style="font-size: 20px; font-family: 'Varela Round', Helvetica, Arial, sans-serif;
+                                text-align: center; font-weight: bold;">환율</p>
+                                <p class="mb-0" th:text="${travelInfo.textchange}" style="text-align: center; font-size: 20px;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="untree_co-section">
+            <div class="container">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-md-6 text-center">
+                        <h2 class="section-title mb-3 text-center"
+                            style="font-family: 'Varela Round', Helvetica, Arial, sans-serif">인기 도시</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 mb-4" th:each="travel: ${travelDtllist}">
+                        <div class="team">
+                            <img th:src="${travel.imgUrl}" alt="Image" class="img-fluid mb-4 rounded-20">
+                            <div class="px-3">
+                                <h3 class="mb-0" style="font-family: 'Varela Round', Helvetica, Arial, sans-serif"
+                                    th:text="${travel.oriImgName}"></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div align="center" style="height: 400px; margin-bottom: 50px;">
+            <iframe id="gmap" th:src="${travelInfo.taddress}" style="width: 40%; height: inherit;">
+            </iframe>
+        </div>
+
+        <div class="text-center">
+            <button sec:authorize="isAuthenticated()" th:formaction="@{/travel/travelDtl(tid=${travelInfo.tid})}" type="submit"
+                    class="btn btn-primary" style="margin-bottom: 50px">등록
+            </button>
+            <button sec:authorize="hasAnyAuthority('ROLE_ADMIN')"  type="button" id="mod" class="btn btn-primary" style="margin-bottom: 50px">수정
+            </button>
+            <button sec:authorize="hasAnyAuthority('ROLE_ADMIN')"  type="button" id="del" class="btn btn-primary" style="margin-bottom: 50px">삭제
+            </button>
+        </div>
+
+    </form>
+
+    <script>
+        $("#del").on("click", function () {
+            if (!confirm("정말로 삭제하시겠습니까?")) return;
+
+            let form = $("#form");
+            form.attr("action", "[[@{/travel/del(tid=${travelInfo.tid})}]]");
+            form.attr("method", "post");
+            form.submit();
+        });
+
+        $("#mod").on("click", function () {
+            var tid = [[${travelInfo.tid}]];
+            location.href="/travel/updateTravelInfo/"+tid;
+        });
+
+    </script>
+
+</div>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}" xmlns="http://www.w3.org/1999/html">
+
+<div layout:fragment="content">
+    <!--title-->
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mx-auto text-center">
+                    <div class="intro-wrap">
+                        <h1 class="mb-0">커뮤니티</h1>
+                        <p class="text-white">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--end title-->
+
+
+    <!--content-->
+    <div class="untree_co-section">
+        <div class="container">
+            <form th:action="@{/board/lists}" role="form" method="get" th:object="${boardList}">
+                <div class="row">
+                    <div class="col-6 col-md-6 col-lg-3 bor" th:each="boards : ${boardList} ">
+                        <div class="service text-center">
+                            <span class="icon-paper-plane"></span>
+                            <h3><a th:href="'/board/view/' + ${boards.getBid()}" th:text="${boards.getBtitle()}"></a></h3>
+                            <p th:text="${boards.getBcontent()}"></p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div><!--end content-->
+</div>
+
+
+</html>

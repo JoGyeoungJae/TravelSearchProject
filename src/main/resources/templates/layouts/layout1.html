@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/css/owl.theme.default.min.css}" rel="stylesheet">
+    <link th:href="@{/css/jquery.fancybox.min.css}" rel="stylesheet">
+    <link th:href="@{/fonts/icomoon/style.css}" rel="stylesheet">
+    <link th:href="@{/fonts/flaticon/font/flaticon.css}" rel="stylesheet">
+    <link th:href="@{/css/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/css/aos.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/css/owl.theme.default.min.css}" rel="stylesheet">
+    <link th:href="@{/css/jquery.fancybox.min.css}" rel="stylesheet">
+    <link th:href="@{/fonts/icomoon/style.css}" rel="stylesheet">
+    <link th:href="@{/fonts/flaticon/font/flaticon.css}" rel="stylesheet">
+    <link th:href="@{/css/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/css/aos.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <th:block layout:fragment="script">
+        <script src="/js/jquery-3.4.1.min.js"></script>
+    </th:block>
+    <title>Title</title>
+
+
+    <th:block layout:fragment="css"></th:block>
+
+</head>
+<body>
+
+    <div th:replace="fragments/header::header"></div>
+
+    <div layout:fragment="content" class="content">
+    </div>
+
+    <div th:replace="fragments/footer::footer"></div>
+    <th:block layout:fragment="script">
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/owl.carousel.min.js"></script>
+        <script src="/js/jquery.animateNumber.min.js"></script>
+        <script src="/js/jquery.waypoints.min.js"></script>
+        <script src="/js/jquery.fancybox.min.js"></script>
+        <script src="/js/aos.js"></script>
+        <script src="/js/moment.min.js"></script>
+        <script src="/js/daterangepicker.js"></script>
+
+        <script src="/js/typed.js"></script>
+        <script src="/js/custom.js"></script>
+    </th:block>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<div layout:fragment="content">
+    <style>
+        .TLQKF {
+            word-break: break-all;
+            overflow: hidden;
+            white-space: normal;
+            line-height: 12;
+            height: 16em;
+            text-align: left;
+            word-wrap: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        .media_img{
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mx-auto text-center">
+                    <div class="intro-wrap">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="custom-block" data-aos="fade-up" data-aos-delay="100">
+                <p style="font-size: 40px; text-align: center;">미디어 관련 여행지 추천!</p>
+                <div class="row">
+                    <div class="col-6 col-md-6 col-lg-3" th:each="mediainfos : ${mediaAll}" >
+                        <div class="media-1" style="margin-bottom: 10% ">
+                            <figure class="img-play-video">
+                                <a id="play-video" class="video-play-button" th:href="@{${mediainfos.getKey().elink}}" data-fancybox>
+                                <span></span>
+                                </a>
+                                <a href="#" class="TLQKF"><img th:src="${mediainfos.getValue()}" alt="Image" class="img-fluid media_img"></a>
+                            </figure>
+                            <div class="d-flex">
+                                <div>
+                                    <a th:href="@{/media/modify(eid=${mediainfos.getKey().eid})}">
+                                        <p th:text="${mediainfos.getKey().etitle}"></p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div th:if="${!medialist.isEmpty()}">
+            <!-- 전역 변수 선언 -->
+            <nav
+                    th:with="
+                    pageNumber = ${medialist.pageable.pageNumber},
+                    pageSize = ${medialist.pageable.pageSize},
+                    totalPages = ${medialist.totalPages},
+                    startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                    tempEndPage = ${startPage + pageSize - 1},
+                    endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
+                    aria-label="Page navigation"
+            >
+                <ul class="pagination " style="justify-content: center;">
+                    <!-- 처음으로 이동 -->
+                    <li th:classappend="${medialist.first} ? 'disabled'" class="page-item">
+                        <a class="page-link" th:href="${medialist.first} ? '#' : @{/media/medialist(page=0)}">
+                            <span>&laquo;</span>
+                            <span class="sr-only">First</span>
+                        </a>
+                    </li>
+
+                    <!-- 이전으로 이동 -->
+                    <li th:classappend="${medialist.first} ? 'disabled'" class="page-item">
+                        <a class="page-link"
+                           th:href="${medialist.first} ? '#' : @{/media/medialist(page=${pageNumber - 1})}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+
+                    <!-- 특정 페이지로 이동 -->
+                    <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
+                        th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                        <a th:text="${page}" class="page-link"
+                           th:href="@{/media/medialist(page=${page - 1})}"></a>
+                    </li>
+
+                    <!-- 다음으로 이동 -->
+                    <li th:classappend="${medialist.last} ? 'disabled'" class="page-item">
+                        <a class="page-link"
+                           th:href="${medialist.last} ? '#' : @{/media/medialist(page=${pageNumber + 1})}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+
+                    <!-- 마지막으로 이동 -->
+                    <li th:classappend="${medialist.last} ? 'disabled'" class="page-item">
+                        <a class="page-link"
+                           th:href="${medialist.last} ? '#' : @{/media/medialist(page=${medialist.totalPages - 1})}">
+                            <span>&raquo;</span>
+                            <span class="sr-only">Last</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div> <!-- /container -->
+</div>
+</div>
+</html>

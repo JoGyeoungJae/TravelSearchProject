@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<div layout:fragment="content">
+    <style>
+        .pageStyle {
+            word-break: break-all;
+            overflow: hidden;
+            white-space: normal;
+            line-height: 1.2;
+            height: 3.6em;
+            text-align: left;
+            word-wrap: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        .travel_img{
+            width: 300px; height: 200px;
+        }
+    </style>
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $("select[name='countryid']").on("change", function(){
+                var countryid = document.getElementById("countryid").value;
+                var countStr = "";
+                $.ajax({
+                    url : "/city/citylist",
+                    type : 'post',
+                    data : {
+                        "countryid" : countryid
+                    },
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader(header, token);
+                    },
+                    dataType : "JSON",
+                    success : function(data) {
+                        $(data).each(function(){
+                            countStr += "<option value='"+ this.cityid +"'>"+ this.ccity + "</option>";
+                        });
+                        $("select[name='cityid']").html(countStr);
+                    }
+                });
+            });
+        });
+
+    </script>
+    <div class="hero hero-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mx-auto text-center">
+                    <div class="intro-wrap">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="untree_co-section">
+        <div class="container">
+            <p style="font-size: 40px; text-align: center;">축제 정보 리스트</p>
+            <form action="/festival/festivallist" style="width: 70%; margin-left: 13%;">
+                <div class="row mb-2" style="flex-flow: inherit">
+                    <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-4">
+                        <select class="form-control custom-select" id="countryid" name="countryid">
+                            <option  th:each="countryList : ${countryList}" th:value="${countryList.countryid}">[[${countryList.ccountry}]]</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-4">
+                        <select   name="cityid" id="cityid" class="form-control custom-select">
+                            <option value="0">--선택--</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-3">
+                        <button id="searchbtn" type="submit" style="background-color: rgb(0,0,0,0); border: 0;" >
+                            <img src="/images/photo/pngwing.png" style="height: 30px; margin-top: 5%;"></button>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div th:each="festivallist : ${festivallist}" class="col-6 col-md-6 col-lg-3" >
+                    <div class="media-1">
+                        <a href="#" class="d-block mb-3"><img th:src="${festivallist.imgUrl}" alt="Image" class="img-fluid travel_img"></a>
+                        <div class="d-flex">
+                            <div>
+                                <h3>
+                                    <a th:href="@{/festival/festivalDtl(fid=${festivallist.fid})}">[[${festivallist.ftitle}]]</a>
+                                </h3>
+                                <p class="pageStyle">[[${festivallist.fcontent}]]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- 페이징 -->
+    <div>
+        <div th:if="${!festivallist.isEmpty()}">
+            <!-- 전역 변수 선언 -->
+            <nav
+                    th:with="
+                    pageNumber = ${festivallist.pageable.pageNumber},
+                    pageSize = ${festivallist.pageable.pageSize},
+                    totalPages = ${festivallist.totalPages},
+                    startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                    tempEndPage = ${startPage + pageSize - 1},
+                    endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
+                    aria-label="Page navigation"
+            >
+                <ul class="pagination " style="justify-content: center;">
+                    <!-- 처음으로 이동 -->
+                    <li th:classappend="${festivallist.first} ? 'disabled'" class="page-item">
+                        <a class="page-link" th:href="${festivallist.first} ? '#' : @{/festival/festivallist(page=0)}">
+                            <span>&laquo;</span>
+                            <span class="sr-only">First</span>
+                        </a>
+                    </li>
+
+                    <!-- 이전으로 이동 -->
+                    <li th:classappend="${festivallist.first} ? 'disabled'" class="page-item">
+                        <a class="page-link"
+                           th:href="${festivallist.first} ? '#' : @{/festival/festivallist(page=${pageNumber - 1})}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+
+                    <!-- 특정 페이지로 이동 -->
+                    <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
+                        th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                        <a th:text="${page}" class="page-link"
+                           th:href="@{/festival/festivallist(page=${page - 1})}"></a>
+                    </li>
+
+                    <!-- 다음으로 이동 -->
+                    <li th:classappend="${festivallist.last} ? 'disabled'" class="page-item">
+                        <a class="page-link"
+                           th:href="${festivallist.last} ? '#' : @{/festival/festivallist(page=${pageNumber + 1})}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+
+                    <!-- 마지막으로 이동 -->
+                    <li th:classappend="${festivallist.last} ? 'disabled'" class="page-item">
+                        <a class="page-link"
+                           th:href="${festivallist.last} ? '#' : @{/festival/festivallist(page=${festivallist.totalPages - 1})}">
+                            <span>&raquo;</span>
+                            <span class="sr-only">Last</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div> <!-- /container -->
+    </div>
+</div>
+</html>

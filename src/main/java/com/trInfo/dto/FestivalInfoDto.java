@@ -1,0 +1,23 @@
+package com.trInfo.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class FestivalInfoDto {
+
+    private Long fid;
+    private String ftitle;
+    private String fcontent;
+    private String faddress;
+    private String fmapurl;
+    private LocalDateTime startdate;
+    private LocalDateTime enddate;
+}
